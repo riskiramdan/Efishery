@@ -6,6 +6,7 @@ import (
 	"net/http"
 	"strings"
 
+	"github.com/go-chi/chi"
 	"github.com/riskiramdan/efishery/golang/internal/appcontext"
 	"github.com/riskiramdan/efishery/golang/internal/constants"
 	"github.com/riskiramdan/efishery/golang/internal/data"
@@ -77,6 +78,11 @@ func (hs *Server) authorizedOnly(userService user.ServiceInterface) func(next ht
 			}
 			ctx = context.WithValue(ctx, appcontext.KeyUserID, singleUser.ID)
 			ctx = context.WithValue(ctx, appcontext.KeySessionID, *singleUser.Token)
+			if singleUser.RoleID == 1 {
+
+				ctx = context.WithValue(ctx, appcontext.KeyIsAdmin, true)
+			}
+
 			next.ServeHTTP(w, r.WithContext(ctx))
 		}
 
@@ -94,4 +100,28 @@ func getBearerToken(r *http.Request) string {
 
 	token = strings.Trim(splitToken[1], " ")
 	return token
+}
+
+func adminRouter(hs *Server) http.Handler {
+	r := chi.NewRouter()
+	r.Use(AdminOnly)
+	r.Get("/aggregate", hs.concurrencyController.Aggregate)
+	return r
+}
+
+// AdminOnly ..
+func AdminOnly(next http.Handler) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		ctx := r.Context()
+		if !appcontext.IsAdmin(ctx) {
+			response.Error(w, "Admin Only", http.StatusUnauthorized, types.Error{
+				Path:    ".Server->authorizeOnly()",
+				Message: "",
+				Error:   nil,
+				Type:    "",
+			})
+			return
+		}
+		next.ServeHTTP(w, r)
+	})
 }

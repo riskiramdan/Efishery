@@ -83,7 +83,9 @@ func (hs *Server) compileRouter() chi.Router {
 		hs.authMethod(r, "GET", "/users", hs.userController.ListUser)
 
 		hs.authMethod(r, "GET", "/concurrency/conversion", hs.concurrencyController.Conversion)
-		hs.authMethod(r, "GET", "/concurrency/aggregate", hs.concurrencyController.Aggregate)
+
+		r.Mount("/admin", adminRouter(hs))
+		// hs.authMethod(r, "GET", "/concurrency/aggregate", hs.concurrencyController.Aggregate)
 	})
 
 	return r

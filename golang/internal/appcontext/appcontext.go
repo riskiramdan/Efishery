@@ -51,6 +51,9 @@ const (
 
 	// KeyAllLog represents the key Log String in server context
 	KeyAllLog contextKey = "KeyAllLog"
+
+	// KeyIsAdmin represents the key Log String in server context
+	KeyIsAdmin contextKey = "Admin"
 )
 
 // Owner gets the data owner from the context
@@ -199,4 +202,14 @@ func AllLog(ctx context.Context) *string {
 		return &v
 	}
 	return nil
+}
+
+// IsAdmin gets admin status from context
+func IsAdmin(ctx context.Context) bool {
+	IsAdmin := ctx.Value(KeyIsAdmin)
+	if IsAdmin != nil {
+		v := IsAdmin.(bool)
+		return v
+	}
+	return false
 }

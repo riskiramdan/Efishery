@@ -24,16 +24,13 @@ func SeedUp() error {
 	_, err = db.Exec(`
 	INSERT INTO public."role"
 	(id, "name", "createdAt", "createdBy", "updatedAt", "updatedBy", "deletedAt", "deletedBy")
-	VALUES(1, 'Super Admin', '2021-02-04 17:22:00.028991', 'admin', '2021-02-04 17:22:00.028991', 'admin', NULL, NULL);
+	VALUES(1, 'Admin', '2021-02-04 17:22:00.028991', 'admin', '2021-02-04 17:22:00.028991', 'admin', NULL, NULL);
 	INSERT INTO public."role"
 	(id, "name", "createdAt", "createdBy", "updatedAt", "updatedBy", "deletedAt", "deletedBy")
-	VALUES(2, 'Admin', '2021-02-04 17:22:12.427675', 'admin', '2021-02-04 17:22:12.427675', 'admin', NULL, NULL);
+	VALUES(2, 'Operator', '2021-02-04 17:22:21.016457', 'admin', '2021-02-04 17:22:21.016457', 'admin', NULL, NULL);
 	INSERT INTO public."role"
 	(id, "name", "createdAt", "createdBy", "updatedAt", "updatedBy", "deletedAt", "deletedBy")
-	VALUES(3, 'Operator', '2021-02-04 17:22:21.016457', 'admin', '2021-02-04 17:22:21.016457', 'admin', NULL, NULL);
-	INSERT INTO public."role"
-	(id, "name", "createdAt", "createdBy", "updatedAt", "updatedBy", "deletedAt", "deletedBy")
-	VALUES(4, 'Guest', '2021-02-04 17:22:37.551864', 'admin', '2021-02-04 17:22:37.551864', 'admin', NULL, NULL);	
+	VALUES(3, 'Guest', '2021-02-04 17:22:37.551864', 'admin', '2021-02-04 17:22:37.551864', 'admin', NULL, NULL);	
 	`)
 	if err != nil {
 		return err
