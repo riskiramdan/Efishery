@@ -27,8 +27,8 @@ const (
 	layoutTIMEISO = "2006-01-02"
 )
 
-// Conversion function
-func (a *ConcurrencyController) Conversion(w http.ResponseWriter, r *http.Request) {
+// GetListPrices for getting list data prices
+func (a *ConcurrencyController) GetListPrices(w http.ResponseWriter, r *http.Request) {
 	result, cnt, err := a.concurrencyService.ListDataPrice(r.Context(), &r.Header)
 	if err != nil {
 		response.Error(w, "Internal Server Error", http.StatusInternalServerError, *err)
@@ -40,8 +40,8 @@ func (a *ConcurrencyController) Conversion(w http.ResponseWriter, r *http.Reques
 	})
 }
 
-// Aggregate function ..
-func (a *ConcurrencyController) Aggregate(w http.ResponseWriter, r *http.Request) {
+// GetAggregation for aggregate resources data
+func (a *ConcurrencyController) GetAggregation(w http.ResponseWriter, r *http.Request) {
 	var err *types.Error
 	var errConversion error
 	queryValues := r.URL.Query()

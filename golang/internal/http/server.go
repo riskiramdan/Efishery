@@ -73,19 +73,18 @@ func (hs *Server) compileRouter() chi.Router {
 
 	// Add routes
 
-	r.HandleFunc("/login", hs.userController.Login)
-	r.HandleFunc("/verify", hs.userController.VerifyToken)
+	r.HandleFunc("/login", hs.userController.PostLogin)
+	r.HandleFunc("/register", hs.userController.PostCreateUser)
+	r.HandleFunc("/verify", hs.userController.PostVerifyToken)
 
-	r.Route("/", func(r chi.Router) {
+	r.Route("/auth", func(r chi.Router) {
 		r.Use(hs.authorizedOnly(hs.userService))
 
-		hs.authMethod(r, "POST", "/users", hs.userController.CreateUser)
-		hs.authMethod(r, "GET", "/users", hs.userController.ListUser)
-
-		hs.authMethod(r, "GET", "/concurrency/conversion", hs.concurrencyController.Conversion)
+		hs.authMethod(r, "GET", "/users", hs.userController.GetListUser)
+		hs.authMethod(r, "GET", "/prices", hs.concurrencyController.GetListPrices)
+		hs.authMethod(r, "POST", "/verify", hs.userController.PostVerifyToken)
 
 		r.Mount("/admin", adminRouter(hs))
-		// hs.authMethod(r, "GET", "/concurrency/aggregate", hs.concurrencyController.Aggregate)
 	})
 
 	return r

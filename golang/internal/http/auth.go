@@ -105,7 +105,7 @@ func getBearerToken(r *http.Request) string {
 func adminRouter(hs *Server) http.Handler {
 	r := chi.NewRouter()
 	r.Use(AdminOnly)
-	r.Get("/aggregate", hs.concurrencyController.Aggregate)
+	r.Get("/aggregate", hs.concurrencyController.GetAggregation)
 	return r
 }
 

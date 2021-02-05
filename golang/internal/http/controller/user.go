@@ -26,8 +26,8 @@ type UserList struct {
 	Total int          `json:"total"`
 }
 
-// ListUser function for get list data users
-func (a *UserController) ListUser(w http.ResponseWriter, r *http.Request) {
+// GetListUser function for get list data users
+func (a *UserController) GetListUser(w http.ResponseWriter, r *http.Request) {
 	var err *types.Error
 
 	queryValues := r.URL.Query()
@@ -94,8 +94,8 @@ func (a *UserController) ListUser(w http.ResponseWriter, r *http.Request) {
 	})
 }
 
-// CreateUser ..
-func (a *UserController) CreateUser(w http.ResponseWriter, r *http.Request) {
+// PostCreateUser for creating data user
+func (a *UserController) PostCreateUser(w http.ResponseWriter, r *http.Request) {
 	var err *types.Error
 
 	decoder := json.NewDecoder(r.Body)
@@ -138,8 +138,8 @@ func (a *UserController) CreateUser(w http.ResponseWriter, r *http.Request) {
 	response.JSON(w, http.StatusOK, resp)
 }
 
-// Login ..
-func (a *UserController) Login(w http.ResponseWriter, r *http.Request) {
+// PostLogin for getting authorization ..
+func (a *UserController) PostLogin(w http.ResponseWriter, r *http.Request) {
 	var err *types.Error
 
 	decoder := json.NewDecoder(r.Body)
@@ -183,8 +183,8 @@ func (a *UserController) Login(w http.ResponseWriter, r *http.Request) {
 	response.JSON(w, http.StatusOK, sess)
 }
 
-// VerifyToken ..
-func (a *UserController) VerifyToken(w http.ResponseWriter, r *http.Request) {
+// PostVerifyToken for verify token  ..
+func (a *UserController) PostVerifyToken(w http.ResponseWriter, r *http.Request) {
 	var err *types.Error
 	decoder := json.NewDecoder(r.Body)
 
