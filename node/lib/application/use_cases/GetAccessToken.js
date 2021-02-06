@@ -5,6 +5,7 @@ module.exports = async (phone, password, { userRepository, accessTokenManager })
   if (!user || user.password !== password) {
     throw new Error('Bad credentials');
   }
+  var today = new Date();
   const token = accessTokenManager.generate({ 
     uid: user.id,
     exp : Math.floor(Date.now() / 1000) + (60 * 60),
@@ -14,6 +15,10 @@ module.exports = async (phone, password, { userRepository, accessTokenManager })
     roleId : user.roleId,
     timestamp: Date.now(),
   })
+  user.token = token
+  user.tokenExpiredAt = today.setHours(today.getHours() + 1)
+
+  await userRepository.merge(user);
 
   const auth = {
     'sessionId' :token,

@@ -11,7 +11,7 @@ module.exports = {
 
     server.auth.strategy('oauth-jwt', 'oauth');
 
-    server.route({
+    server.route([{
       method: 'POST',
       path: '/oauth/token',
       handler: AuthorizationController.getAccessToken,
@@ -19,6 +19,15 @@ module.exports = {
         description: 'Return an OAuth 2 access token',
         tags: ['api'],
       },
-    });
+    },
+    {
+      method:'POST',
+      path:'/oauth/verify',
+      handler: AuthorizationController.extractAcccessToken,
+      options : {
+        description: 'Return data claims',
+        tags : ['api'],
+      }
+    }]);
   }
 };

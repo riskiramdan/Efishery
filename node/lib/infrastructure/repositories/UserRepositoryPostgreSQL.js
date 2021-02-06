@@ -26,6 +26,7 @@ module.exports = class extends UserRepository {
     if (!seqUser) return false;
 
     const { roleId, name, phone, password, token, tokenExpiredAt, updatedAt, updatedBy, deletedAt, deletedBy } = userEntity;
+
     await seqUser.update({ roleId, name, phone, password, token, tokenExpiredAt, updatedAt, updatedBy, deletedAt, deletedBy});
 
     return new User(seqUser.id, seqUser.roleId, seqUser.name, seqUser.phone, seqUser.password);
@@ -48,6 +49,11 @@ module.exports = class extends UserRepository {
     const seqUser = await this.model.findOne({ where: { phone: userPhone } });
     return new User(seqUser.id, seqUser.roleId, seqUser.name, seqUser.phone, seqUser.password);
   }
+
+  async getByToken(userToken) {
+    const seqUser = await this.model.findOne({ where: { token: userToken } });
+    return new User(seqUser.id, seqUser.roleId, seqUser.name, seqUser.phone, seqUser.password, seqUser.token, seqUser.tokenExpiredAt);
+  }  
 
   async find() {
     const seqUsers = await this.model.findAll();

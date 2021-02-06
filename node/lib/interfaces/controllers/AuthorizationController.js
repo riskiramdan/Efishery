@@ -1,6 +1,7 @@
 'use strict';
 
 const Boom = require('@hapi/boom');
+const ExtractAccessToken = require('../../application/use_cases/ExtractAccessToken');
 const GetAccessToken = require('../../application/use_cases/GetAccessToken');
 const VerifyAccessToken = require('../../application/use_cases/VerifyAccessToken');
 
@@ -20,6 +21,22 @@ module.exports = {
       // Output
       return auth;
     } catch (err) {
+      return Boom.unauthorized('Bad credentials');
+    }
+  },
+
+  async extractAcccessToken(request) {
+    // Context
+    const serviceLocator = request.server.app.serviceLocator;
+    // Input
+    const token = request.payload['token'];
+    // Treatment
+    try {
+      const auth = await ExtractAccessToken(token, serviceLocator);
+      // Output
+      return auth;
+    } catch (err) {
+      console.log(err)
       return Boom.unauthorized('Bad credentials');
     }
   },
