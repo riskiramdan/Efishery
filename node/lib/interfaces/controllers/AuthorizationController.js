@@ -10,17 +10,15 @@ module.exports = {
 
     // Context
     const serviceLocator = request.server.app.serviceLocator;
-
     // Input
     const phone = request.payload['phone'];
     const password = request.payload['password'];
 
     // Treatment
     try {
-      const accessToken = await GetAccessToken(phone, password, serviceLocator);
-
+      const auth = await GetAccessToken(phone, password, serviceLocator);
       // Output
-      return serviceLocator.authSerializer.serializer(accessToken);
+      return auth;
     } catch (err) {
       return Boom.unauthorized('Bad credentials');
     }

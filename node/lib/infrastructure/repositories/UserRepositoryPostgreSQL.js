@@ -44,7 +44,7 @@ module.exports = class extends UserRepository {
     return new User(seqUser.id, seqUser.roleId, seqUser.name, seqUser.phone, seqUser.password);
   }
 
-  async getByPhonel(userPhone) {
+  async getByPhone(userPhone) {
     const seqUser = await this.model.findOne({ where: { phone: userPhone } });
     return new User(seqUser.id, seqUser.roleId, seqUser.name, seqUser.phone, seqUser.password);
   }

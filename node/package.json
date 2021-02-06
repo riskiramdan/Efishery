@@ -1,5 +1,5 @@
 {
-  "name": "nodejs-clean-architecture-app",
+  "name": "efishery-node",
   "version": "1.0.0",
   "description": "A simple API built with Node.js/Hapi.js that follows DDD + Clean Architecture principles",
   "main": "index.js",

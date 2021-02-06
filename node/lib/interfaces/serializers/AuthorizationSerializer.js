@@ -1,6 +1,6 @@
 'use strict';
 
-const _serializeAuthorization = (auth) => {
+const _serializeAuth = (auth) => {
   return {
     'sessionId': auth.token,
     'claims' :{
@@ -19,11 +19,11 @@ module.exports = class {
   serialize(data) {
     if (!data) {
       throw new Error('Expect data to be not undefined nor null');
-    }
+    }    
     if (Array.isArray(data)) {
-      return data.map(_serializeAuthorization);
+      return data.map(_serializeAuth);
     }
-    return _serializeAuthorization(data);
+    return _serializeAuth(data);
   }
 
 };

@@ -31,6 +31,7 @@ module.exports = {
     // Treatment
     const users = await ListUsers(serviceLocator);
 
+
     // Output
     return users.map(serviceLocator.userSerializer.serialize)
   },
