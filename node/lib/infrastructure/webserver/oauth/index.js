@@ -1,6 +1,7 @@
 'use strict';
 
 const AuthorizationController = require('../../../interfaces/controllers/AuthorizationController');
+const ConcurrenctyController = require('../../../interfaces/controllers/ConcurrenctyController');
 
 module.exports = {
   name: 'oauth',
@@ -24,10 +25,19 @@ module.exports = {
       method:'POST',
       path:'/oauth/verify',
       handler: AuthorizationController.extractAcccessToken,
-      options : {
-        description: 'Return data claims',
-        tags : ['api'],
-      }
-    }]);
+      options: {
+        tags : ['api']
+      },
+    },
+    {
+      method:'GET',
+      path:'/prices',
+      handler: ConcurrenctyController.getListDataPrice,
+      config: {
+        auth:'oauth-jwt',
+        tags : ['api']
+      },
+    }
+  ]);
   }
 };

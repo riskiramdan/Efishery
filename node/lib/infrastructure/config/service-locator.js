@@ -4,12 +4,14 @@ const constants = require('./constants');
 const environment = require('./environment');
 const JwtAccessTokenManager = require('../security/JwtAccessTokenManager');
 const UserSerializer = require('../../interfaces/serializers/UserSerializer');
+const RedisManager = require('../../infrastructure/redis/RedisManager');
 
 function buildBeans() {
 
   const beans = {
     accessTokenManager: new JwtAccessTokenManager(),
     userSerializer: new UserSerializer(),
+    redisManager: new RedisManager()
   };
 
   if (environment.database.dialect === constants.SUPPORTED_DATABASE.IN_MEMORY) {

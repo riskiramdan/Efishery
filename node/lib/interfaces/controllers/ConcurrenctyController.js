@@ -2,25 +2,23 @@
 
 const Boom = require('@hapi/boom');
 const ExtractAccessToken = require('../../application/use_cases/ExtractAccessToken');
-const GetAccessToken = require('../../application/use_cases/GetAccessToken');
+const ListPrices = require('../../application/use_cases/ListPrices');
 const VerifyAccessToken = require('../../application/use_cases/VerifyAccessToken');
 
 module.exports = {
 
-  async getAccessToken(request) {
+  async getListDataPrice(request) {
 
     // Context
     const serviceLocator = request.server.app.serviceLocator;
-    // Input
-    const phone = request.payload['phone'];
-    const password = request.payload['password'];
 
     // Treatment
     try {
-      const auth = await GetAccessToken(phone, password, serviceLocator);
+      const prices = await ListPrices(serviceLocator);
       // Output
-      return auth;
+      return {"prices" : prices, "total" : prices.length};
     } catch (err) {
+      console.log(err)
       return Boom.unauthorized('Bad credentials');
     }
   },
@@ -29,7 +27,7 @@ module.exports = {
     // Context
     const serviceLocator = request.server.app.serviceLocator;
     // Input
-    let token = request.payload['token']
+    const token = request.payload['token'];
     // Treatment
     try {
       const auth = await ExtractAccessToken(token, serviceLocator);

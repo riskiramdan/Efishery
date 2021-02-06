@@ -22,6 +22,10 @@ module.exports = class {
     throw new Error('ERR_METHOD_NOT_IMPLEMENTED');
   }
 
+  getByToken(token) {
+    throw new Error('ERR_METHOD_NOT_IMPLEMENTED');
+  }
+
   find() {
     throw new Error('ERR_METHOD_NOT_IMPLEMENTED');
   }

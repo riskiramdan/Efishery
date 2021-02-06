@@ -8,7 +8,6 @@ module.exports = async (phone, password, { userRepository, accessTokenManager })
   var today = new Date();
   const token = accessTokenManager.generate({ 
     uid: user.id,
-    exp : Math.floor(Date.now() / 1000) + (60 * 60),
     iat: Math.floor(Date.now() / 1000) - 30,
     name: user.name,
     phone: user.phone,
@@ -23,12 +22,11 @@ module.exports = async (phone, password, { userRepository, accessTokenManager })
   const auth = {
     'sessionId' :token,
     'claims': {
-      'exp':Math.floor(Date.now() / 1000) + (60 * 60),
       'iat':Math.floor(Date.now() / 1000) - 30,
       'name':user.name,
       'phone' :user.phone,
       'roleId' : user.roleId,
-      timestamp :Date.now()
+      'timestamp' :Date.now()
     }
   }
 

@@ -208,6 +208,7 @@ func (s *Service) Login(ctx context.Context, phone string, password string) (*Lo
 
 	Token := jwt.New(constants.SigningMethod)
 	tClaims := Token.Claims.(jwt.MapClaims)
+	tClaims["uid"] = user.ID
 	tClaims["name"] = user.Name
 	tClaims["phone"] = user.Phone
 	tClaims["roleId"] = user.RoleID
