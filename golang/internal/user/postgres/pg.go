@@ -15,9 +15,9 @@ type Storage struct {
 }
 
 // FindAll find all users
-func (s *Storage) FindAll(ctx context.Context, params *user.FindAllUsersParams) ([]*user.User, *types.Error) {
+func (s *Storage) FindAll(ctx context.Context, params *user.FindAllUsersParams) ([]*user.Users, *types.Error) {
 
-	users := []*user.User{}
+	users := []*user.Users{}
 	where := `"deletedAt" IS NULL`
 
 	if params.ID != 0 {
@@ -59,7 +59,7 @@ func (s *Storage) FindAll(ctx context.Context, params *user.FindAllUsersParams) 
 }
 
 // FindByID find user by its id
-func (s *Storage) FindByID(ctx context.Context, userID int) (*user.User, *types.Error) {
+func (s *Storage) FindByID(ctx context.Context, userID int) (*user.Users, *types.Error) {
 	users, err := s.FindAll(ctx, &user.FindAllUsersParams{
 		ID: userID,
 	})
@@ -81,7 +81,7 @@ func (s *Storage) FindByID(ctx context.Context, userID int) (*user.User, *types.
 }
 
 // FindByPhone find user by its phone
-func (s *Storage) FindByPhone(ctx context.Context, phone string) (*user.User, *types.Error) {
+func (s *Storage) FindByPhone(ctx context.Context, phone string) (*user.Users, *types.Error) {
 	users, err := s.FindAll(ctx, &user.FindAllUsersParams{
 		Phone: phone,
 	})
@@ -103,7 +103,7 @@ func (s *Storage) FindByPhone(ctx context.Context, phone string) (*user.User, *t
 }
 
 // FindByToken find user by its token
-func (s *Storage) FindByToken(ctx context.Context, token string) (*user.User, *types.Error) {
+func (s *Storage) FindByToken(ctx context.Context, token string) (*user.Users, *types.Error) {
 	users, err := s.FindAll(ctx, &user.FindAllUsersParams{
 		Token: token,
 	})
@@ -125,7 +125,7 @@ func (s *Storage) FindByToken(ctx context.Context, token string) (*user.User, *t
 }
 
 // Insert insert user
-func (s *Storage) Insert(ctx context.Context, user *user.User) (*user.User, *types.Error) {
+func (s *Storage) Insert(ctx context.Context, user *user.Users) (*user.Users, *types.Error) {
 	err := s.Storage.Insert(ctx, user)
 	if err != nil {
 		return nil, &types.Error{
@@ -140,7 +140,7 @@ func (s *Storage) Insert(ctx context.Context, user *user.User) (*user.User, *typ
 }
 
 // Update update user
-func (s *Storage) Update(ctx context.Context, user *user.User) (*user.User, *types.Error) {
+func (s *Storage) Update(ctx context.Context, user *user.Users) (*user.Users, *types.Error) {
 	err := s.Storage.Update(ctx, user)
 	if err != nil {
 		return nil, &types.Error{

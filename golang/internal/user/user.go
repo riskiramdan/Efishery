@@ -21,7 +21,7 @@ var (
 )
 
 // User user
-type User struct {
+type Users struct {
 	ID             int        `json:"id" db:"id"`
 	RoleID         int        `json:"roleId" db:"roleId"`
 	Name           string     `json:"name" db:"name"`
@@ -70,22 +70,22 @@ type VerifyParams struct {
 
 // Storage represents the user storage interface
 type Storage interface {
-	FindAll(ctx context.Context, params *FindAllUsersParams) ([]*User, *types.Error)
-	FindByID(ctx context.Context, userID int) (*User, *types.Error)
-	FindByPhone(ctx context.Context, phone string) (*User, *types.Error)
-	FindByToken(ctx context.Context, token string) (*User, *types.Error)
-	Insert(ctx context.Context, user *User) (*User, *types.Error)
-	Update(ctx context.Context, user *User) (*User, *types.Error)
+	FindAll(ctx context.Context, params *FindAllUsersParams) ([]*Users, *types.Error)
+	FindByID(ctx context.Context, userID int) (*Users, *types.Error)
+	FindByPhone(ctx context.Context, phone string) (*Users, *types.Error)
+	FindByToken(ctx context.Context, token string) (*Users, *types.Error)
+	Insert(ctx context.Context, user *Users) (*Users, *types.Error)
+	Update(ctx context.Context, user *Users) (*Users, *types.Error)
 	Delete(ctx context.Context, userID int) *types.Error
 }
 
 // ServiceInterface represents the user service interface
 type ServiceInterface interface {
-	ListUsers(ctx context.Context, params *FindAllUsersParams) ([]*User, int, *types.Error)
-	GetUser(ctx context.Context, userID int) (*User, *types.Error)
-	CreateUser(ctx context.Context, params *TransactionParams) (*User, *types.Error)
+	ListUsers(ctx context.Context, params *FindAllUsersParams) ([]*Users, int, *types.Error)
+	GetUser(ctx context.Context, userID int) (*Users, *types.Error)
+	CreateUser(ctx context.Context, params *TransactionParams) (*Users, *types.Error)
 	Login(ctx context.Context, phone string, password string) (*LoginResponse, *types.Error)
-	GetByToken(ctx context.Context, token string) (*User, *types.Error)
+	GetByToken(ctx context.Context, token string) (*Users, *types.Error)
 	VerifyTokenJWT(ctx context.Context, tokenString string) (interface{}, *types.Error)
 }
 
@@ -95,7 +95,7 @@ type Service struct {
 }
 
 // ListUsers is listing users
-func (s *Service) ListUsers(ctx context.Context, params *FindAllUsersParams) ([]*User, int, *types.Error) {
+func (s *Service) ListUsers(ctx context.Context, params *FindAllUsersParams) ([]*Users, int, *types.Error) {
 	users, err := s.userStorage.FindAll(ctx, params)
 	if err != nil {
 		err.Path = ".UserService->ListUsers()" + err.Path
@@ -113,7 +113,7 @@ func (s *Service) ListUsers(ctx context.Context, params *FindAllUsersParams) ([]
 }
 
 // GetUser is get user
-func (s *Service) GetUser(ctx context.Context, userID int) (*User, *types.Error) {
+func (s *Service) GetUser(ctx context.Context, userID int) (*Users, *types.Error) {
 	user, err := s.userStorage.FindByID(ctx, userID)
 	if err != nil {
 		err.Path = ".UserService->GetUser()" + err.Path
@@ -124,7 +124,7 @@ func (s *Service) GetUser(ctx context.Context, userID int) (*User, *types.Error)
 }
 
 // CreateUser create user
-func (s *Service) CreateUser(ctx context.Context, params *TransactionParams) (*User, *types.Error) {
+func (s *Service) CreateUser(ctx context.Context, params *TransactionParams) (*Users, *types.Error) {
 	users, _, errType := s.ListUsers(ctx, &FindAllUsersParams{
 		Phone: params.Phone,
 	})
@@ -153,7 +153,7 @@ func (s *Service) CreateUser(ctx context.Context, params *TransactionParams) (*U
 
 	now := time.Now()
 
-	user := &User{
+	user := &Users{
 		Name:           params.Name,
 		RoleID:         params.RoleID,
 		Phone:          params.Phone,
@@ -238,7 +238,7 @@ func (s *Service) Login(ctx context.Context, phone string, password string) (*Lo
 }
 
 // GetByToken get user by its token
-func (s *Service) GetByToken(ctx context.Context, token string) (*User, *types.Error) {
+func (s *Service) GetByToken(ctx context.Context, token string) (*Users, *types.Error) {
 	user, err := s.userStorage.FindByToken(ctx, token)
 	if err != nil {
 		err.Path = ".UserService->GetByToken()" + err.Path

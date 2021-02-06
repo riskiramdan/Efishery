@@ -1,0 +1,268 @@
+{
+	"info": {
+		"_postman_id": "2de4cabf-0659-4851-98f5-89007145b425",
+		"name": "efishery",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Auth",
+			"item": [
+				{
+					"name": "1. Create User",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"roleId\" : 2,\n    \"name\" : \"riski\",\n    \"phone\" :\"082128826451\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8083/register",
+							"host": [
+								"localhost"
+							],
+							"port": "8083",
+							"path": [
+								"register"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "2. Login",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"phone\" : \"082128826458\",\n    \"password\" : \"JhBa\"\n}\n/*Admin*/\n/*\n     \"phone\" : \"081212341234\",\n     \"password\" : \"jnmp\"\n} */\n/*Guest*/",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8083/login",
+							"host": [
+								"localhost"
+							],
+							"port": "8083",
+							"path": [
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "3. Verify JWT",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"token\" : \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2MTI2MDcwNDcsImlhdCI6MTYxMjU2Mzg0NywibmFtZSI6Imd1ZXN0IiwicGhvbmUiOiIwODIxMjg4MjY0NTgiLCJyb2xlSWQiOjIsInRpbWVzdGFtcCI6IjIwMjEtMDItMDZUMTc6MjQ6MDcuNTc2MDU2KzA3OjAwIn0.5B1OBN1p2NwstrNNIOUbW0Gf-qMcSRmboXvwG6fjNec\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8083/verify",
+							"host": [
+								"localhost"
+							],
+							"port": "8083",
+							"path": [
+								"verify"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "4. List Users",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2MTI2MDcwNDcsImlhdCI6MTYxMjU2Mzg0NywibmFtZSI6Imd1ZXN0IiwicGhvbmUiOiIwODIxMjg4MjY0NTgiLCJyb2xlSWQiOjIsInRpbWVzdGFtcCI6IjIwMjEtMDItMDZUMTc6MjQ6MDcuNTc2MDU2KzA3OjAwIn0.5B1OBN1p2NwstrNNIOUbW0Gf-qMcSRmboXvwG6fjNec",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8083/auth/users?page=0&limiit=10",
+							"host": [
+								"localhost"
+							],
+							"port": "8083",
+							"path": [
+								"auth",
+								"users"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "0"
+								},
+								{
+									"key": "limiit",
+									"value": "10"
+								},
+								{
+									"key": "name",
+									"value": "ad",
+									"disabled": true
+								},
+								{
+									"key": "email",
+									"value": "",
+									"disabled": true
+								},
+								{
+									"key": "phone",
+									"value": null,
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Fetch",
+			"item": [
+				{
+					"name": "1. List data Price",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2MTI2MDcwNDcsImlhdCI6MTYxMjU2Mzg0NywibmFtZSI6Imd1ZXN0IiwicGhvbmUiOiIwODIxMjg4MjY0NTgiLCJyb2xlSWQiOjIsInRpbWVzdGFtcCI6IjIwMjEtMDItMDZUMTc6MjQ6MDcuNTc2MDU2KzA3OjAwIn0.5B1OBN1p2NwstrNNIOUbW0Gf-qMcSRmboXvwG6fjNec",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8083/auth/prices",
+							"host": [
+								"localhost"
+							],
+							"port": "8083",
+							"path": [
+								"auth",
+								"prices"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "2. Aggregate Data",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2MTI2MDcwNDcsImlhdCI6MTYxMjU2Mzg0NywibmFtZSI6Imd1ZXN0IiwicGhvbmUiOiIwODIxMjg4MjY0NTgiLCJyb2xlSWQiOjIsInRpbWVzdGFtcCI6IjIwMjEtMDItMDZUMTc6MjQ6MDcuNTc2MDU2KzA3OjAwIn0.5B1OBN1p2NwstrNNIOUbW0Gf-qMcSRmboXvwG6fjNec",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8083/auth/admin/aggregate?dateFrom=2020-07-23&dateTo=2020-07-30&areaProvinsi=banten",
+							"host": [
+								"localhost"
+							],
+							"port": "8083",
+							"path": [
+								"auth",
+								"admin",
+								"aggregate"
+							],
+							"query": [
+								{
+									"key": "dateFrom",
+									"value": "2020-07-23"
+								},
+								{
+									"key": "dateTo",
+									"value": "2020-07-30"
+								},
+								{
+									"key": "areaProvinsi",
+									"value": "banten"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "3. Verify JWT",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2MTI2MDcwNDcsImlhdCI6MTYxMjU2Mzg0NywibmFtZSI6Imd1ZXN0IiwicGhvbmUiOiIwODIxMjg4MjY0NTgiLCJyb2xlSWQiOjIsInRpbWVzdGFtcCI6IjIwMjEtMDItMDZUMTc6MjQ6MDcuNTc2MDU2KzA3OjAwIn0.5B1OBN1p2NwstrNNIOUbW0Gf-qMcSRmboXvwG6fjNec",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"token\" : \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2MTI2MDcwNDcsImlhdCI6MTYxMjU2Mzg0NywibmFtZSI6Imd1ZXN0IiwicGhvbmUiOiIwODIxMjg4MjY0NTgiLCJyb2xlSWQiOjIsInRpbWVzdGFtcCI6IjIwMjEtMDItMDZUMTc6MjQ6MDcuNTc2MDU2KzA3OjAwIn0.5B1OBN1p2NwstrNNIOUbW0Gf-qMcSRmboXvwG6fjNec\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8083/auth/verify",
+							"host": [
+								"localhost"
+							],
+							"port": "8083",
+							"path": [
+								"auth",
+								"verify"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}

@@ -1,5 +1,5 @@
 -- Table Definition ----------------------------------------------
-CREATE TABLE "user" (
+CREATE TABLE "users" (
   "id" SERIAL PRIMARY KEY NOT NULL,
   "roleId" int NOT NULL,
   "name" varchar(80) NOT NULL,
@@ -15,7 +15,7 @@ CREATE TABLE "user" (
   "deletedBy" varchar(20)
 );
 
-CREATE TABLE "role" (
+CREATE TABLE "roles" (
   "id" SERIAL PRIMARY KEY NOT NULL,
   "name" varchar(80) NOT NULL,
   "createdAt" timestamp NOT NULL DEFAULT (now()),
@@ -26,4 +26,4 @@ CREATE TABLE "role" (
   "deletedBy" varchar(20)
 );
 
-ALTER TABLE "user" ADD FOREIGN KEY ("roleId") REFERENCES "role" ("id");
+ALTER TABLE "users" ADD FOREIGN KEY ("roleId") REFERENCES "roles" ("id");

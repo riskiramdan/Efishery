@@ -22,8 +22,8 @@ type UserController struct {
 
 // UserList user list and count
 type UserList struct {
-	Data  []*user.User `json:"data"`
-	Total int          `json:"total"`
+	Data  []*user.Users `json:"data"`
+	Total int           `json:"total"`
 }
 
 // GetListUser function for get list data users
@@ -85,7 +85,7 @@ func (a *UserController) GetListUser(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 	if userList == nil {
-		userList = []*user.User{}
+		userList = []*user.Users{}
 	}
 
 	response.JSON(w, http.StatusOK, UserList{
@@ -112,7 +112,7 @@ func (a *UserController) PostCreateUser(w http.ResponseWriter, r *http.Request) 
 		response.Error(w, "Bad Request", http.StatusBadRequest, *err)
 		return
 	}
-	resp := &user.User{}
+	resp := &user.Users{}
 	errTransaction := a.dataManager.RunInTransaction(r.Context(), func(ctx context.Context) error {
 		resp, err = a.userService.CreateUser(ctx, &user.TransactionParams{
 			Name:     params.Name,

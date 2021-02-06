@@ -28,7 +28,7 @@ type InternalServices struct {
 
 func buildInternalServices(db *sqlx.DB, config *config.Config) *InternalServices {
 	userPostgresStorage := userPg.NewPostgresStorage(
-		data.NewPostgresStorage(db, "user", user.User{}),
+		data.NewPostgresStorage(db, "users", user.Users{}),
 	)
 	userService := user.NewService(userPostgresStorage)
 	cache := cache.New(time.Hour*12, time.Hour*12)
