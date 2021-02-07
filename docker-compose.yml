@@ -1,7 +1,6 @@
 version: '3'
 
 services:
-
   postgres:
     image: postgres:alpine
     restart: always
@@ -11,7 +10,6 @@ services:
       POSTGRES_USERNAME : postgres
       POSTGRES_PASSWORD : qweasd123
       POSTGRES_DB : efisherydb
-
 
   redis:
     image: redis:latest

@@ -40,10 +40,10 @@ func SeedUp() error {
 	_, err = db.Exec(`
 	INSERT INTO public.users
 	(id, "roleId", name, phone, "password", "token", "tokenExpiredAt", "createdAt", "createdBy", "updatedAt", "updatedBy", "deletedAt", "deletedBy")
-	VALUES(1, 1, 'admin', '082101010101', 'jLov', NULL, NULL, '2021-02-07 14:37:52.252246', 'admin', '2021-02-07 14:37:52.252246', 'admin', NULL, NULL);
+	VALUES(9999, 1, 'admin', '082101010101', 'jLov', NULL, NULL, '2021-02-07 14:37:52.252246', 'admin', '2021-02-07 14:37:52.252246', 'admin', NULL, NULL);
 	INSERT INTO public.users
 	(id, "roleId", name, phone, "password", "token", "tokenExpiredAt", "createdAt", "createdBy", "updatedAt", "updatedBy", "deletedAt", "deletedBy")
-	VALUES(2, 2, 'efishery', '082102020202', 'VWqV', NULL, NULL, '2021-02-07 14:38:07.292022', 'admin', '2021-02-07 14:38:07.292022', 'admin', NULL, NULL);	
+	VALUES(9998, 2, 'efishery', '082102020202', 'VWqV', NULL, NULL, '2021-02-07 14:38:07.292022', 'admin', '2021-02-07 14:38:07.292022', 'admin', NULL, NULL);	
 	`)
 	if err != nil {
 		return err
