@@ -20,7 +20,7 @@ var (
 	ErrPhoneAlreadyExists = errors.New("Phone Already Exists")
 )
 
-// User user
+// Users user
 type Users struct {
 	ID             int        `json:"id" db:"id"`
 	RoleID         int        `json:"roleId" db:"roleId"`

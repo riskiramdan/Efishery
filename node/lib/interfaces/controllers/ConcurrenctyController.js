@@ -21,7 +21,7 @@ module.exports = {
     }
   },
 
-  async getConversionPrice(request) {
+  async getAggregatePrice(request) {
     // Context
     const serviceLocator = request.server.app.serviceLocator;
     // Input
@@ -30,9 +30,9 @@ module.exports = {
     const areaProvinsi = request.query.areaProvinsi
     // Treatment
     try {
-      const conversion = await GetConversion(dateFrom, dateTo, areaProvinsi, serviceLocator);
+      const aggregateResult = await GetConversion(dateFrom, dateTo, areaProvinsi, serviceLocator);
       // Output
-      return conversion;
+      return aggregateResult;
     } catch (err) {
       console.log(err)
       return Boom.unauthorized('Bad credentials');

@@ -52,10 +52,11 @@ module.exports = {
       throw Boom.badRequest('Missing or wrong Authorization request header', 'oauth');
     }
     const accessToken = authorizationHeader.replace(/Bearer/gi, '').replace(/ /g, '');
+    const path = h.request.route.path
 
     // Treatment
     try {
-      const { uid } = VerifyAccessToken(accessToken, serviceLocator);
+      const { uid } = VerifyAccessToken(accessToken,path, serviceLocator);
 
       // Output
       return h.authenticated({
@@ -63,7 +64,7 @@ module.exports = {
         artifacts: { accessToken: accessToken }
       });
     } catch (err) {
-      return Boom.unauthorized('Bad credentials');
+      return Boom.unauthorized(err);
     }
   },
 

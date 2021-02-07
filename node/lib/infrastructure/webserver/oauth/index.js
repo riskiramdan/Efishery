@@ -40,8 +40,8 @@ module.exports = {
     },
     {
       method:'GET',
-      path:'/conversion',
-      handler: ConcurrenctyController.getConversionPrice,
+      path:'/aggregate',
+      handler: ConcurrenctyController.getAggregatePrice,
       config: {
         auth:'oauth-jwt',
         tags : ['api']
