@@ -1,9 +1,8 @@
 'use strict';
 
 const Boom = require('@hapi/boom');
-const ExtractAccessToken = require('../../application/use_cases/ExtractAccessToken');
+const GetConversion = require('../../application/use_cases/GetConversion');
 const ListPrices = require('../../application/use_cases/ListPrices');
-const VerifyAccessToken = require('../../application/use_cases/VerifyAccessToken');
 
 module.exports = {
 
@@ -18,49 +17,24 @@ module.exports = {
       // Output
       return {"prices" : prices, "total" : prices.length};
     } catch (err) {
-      console.log(err)
       return Boom.unauthorized('Bad credentials');
     }
   },
 
-  async extractAcccessToken(request) {
+  async getConversionPrice(request) {
     // Context
     const serviceLocator = request.server.app.serviceLocator;
     // Input
-    const token = request.payload['token'];
+    const dateFrom = request.query.dateFrom
+    const dateTo = request.query.dateTo
+    const areaProvinsi = request.query.areaProvinsi
     // Treatment
     try {
-      const auth = await ExtractAccessToken(token, serviceLocator);
+      const conversion = await GetConversion(dateFrom, dateTo, areaProvinsi, serviceLocator);
       // Output
-      return auth;
+      return conversion;
     } catch (err) {
       console.log(err)
-      return Boom.unauthorized('Bad credentials');
-    }
-  },
-
-  verifyAccessToken(request, h) {
-
-    // Context
-    const serviceLocator = request.server.app.serviceLocator;
-
-    // Input
-    const authorizationHeader = request.headers.authorization;
-    if (!authorizationHeader || !authorizationHeader.startsWith('Bearer ')) {
-      throw Boom.badRequest('Missing or wrong Authorization request header', 'oauth');
-    }
-    const accessToken = authorizationHeader.replace(/Bearer/gi, '').replace(/ /g, '');
-
-    // Treatment
-    try {
-      const { uid } = VerifyAccessToken(accessToken, serviceLocator);
-
-      // Output
-      return h.authenticated({
-        credentials: { uid },
-        artifacts: { accessToken: accessToken }
-      });
-    } catch (err) {
       return Boom.unauthorized('Bad credentials');
     }
   },

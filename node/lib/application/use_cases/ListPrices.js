@@ -2,7 +2,8 @@
 
 const fetch = require('node-fetch');
 
-module.exports = async ( { redisManager }) => {  
+
+module.exports = async ( { redisManager }) => {
   const responsePrices = await fetch("https://stein.efishery.com/v1/storages/5e1edf521073e315924ceab4/list", {method:'Get'})
   const bodyPrices = await responsePrices.json()
 
@@ -23,14 +24,15 @@ module.exports = async ( { redisManager }) => {
         "area_provinsi" : bodyPrices[i].area_provinsi,
         "area_kota" : bodyPrices[i].area_kota,
         "size" :bodyPrices[i].size,
-        "price" : parseFloat(bodyPrices[i].price),
-        "priceUSD" : parseFloat(bodyPrices[i].price) / parseFloat(USDPrice),
+        "price" : parseFloat(bodyPrices[i].price == null ? 0 : bodyPrices[i].price),
+        "priceUSD" : parseFloat(bodyPrices[i].price == null ? 0 : bodyPrices[i].price) / parseFloat(USDPrice),
         "tgl_parsed" :bodyPrices[i].tgl_parsed,
         "timestamp":bodyPrices[i].timestamp
       }
       arr.push(a)
     }
   }
+  redisManager.setData("LISTPRICES", JSON.stringify(arr))
   
   return arr
 };

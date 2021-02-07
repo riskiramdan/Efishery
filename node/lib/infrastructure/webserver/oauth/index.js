@@ -37,6 +37,15 @@ module.exports = {
         auth:'oauth-jwt',
         tags : ['api']
       },
+    },
+    {
+      method:'GET',
+      path:'/conversion',
+      handler: ConcurrenctyController.getConversionPrice,
+      config: {
+        auth:'oauth-jwt',
+        tags : ['api']
+      },
     }
   ]);
   }
