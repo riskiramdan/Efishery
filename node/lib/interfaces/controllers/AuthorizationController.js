@@ -36,8 +36,7 @@ module.exports = {
       // Output
       return auth;
     } catch (err) {
-      console.log(err)
-      return Boom.unauthorized('Bad credentials');
+      return Boom.unauthorized(err);
     }
   },
 

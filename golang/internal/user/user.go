@@ -10,7 +10,6 @@ import (
 	"github.com/riskiramdan/efishery/golang/internal/types"
 
 	"github.com/dgrijalva/jwt-go"
-	"golang.org/x/crypto/bcrypt"
 )
 
 // Errors
@@ -141,23 +140,13 @@ func (s *Service) CreateUser(ctx context.Context, params *TransactionParams) (*U
 		}
 	}
 
-	bcryptHash, err := bcrypt.GenerateFromPassword([]byte(params.Password), bcrypt.DefaultCost)
-	if err != nil {
-		return nil, &types.Error{
-			Path:    ".UserService->CreateUser()",
-			Message: err.Error(),
-			Error:   err,
-			Type:    "golang-error",
-		}
-	}
-
 	now := time.Now()
 
 	user := &Users{
 		Name:           params.Name,
 		RoleID:         params.RoleID,
 		Phone:          params.Phone,
-		Password:       string(bcryptHash),
+		Password:       params.Password,
 		Token:          nil,
 		TokenExpiredAt: nil,
 		CreatedAt:      now,
@@ -193,8 +182,7 @@ func (s *Service) Login(ctx context.Context, phone string, password string) (*Lo
 	}
 
 	user := users[0]
-	errBcrypt := bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(password))
-	if errBcrypt != nil {
+	if user.Password != password {
 		return nil, &types.Error{
 			Path:    ".UserService->ChangePassword()",
 			Message: ErrWrongPassword.Error(),

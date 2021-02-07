@@ -167,7 +167,7 @@ func (a *UserController) PostLogin(w http.ResponseWriter, r *http.Request) {
 	})
 	if errTransaction != nil {
 		err.Path = ".UserController->Login()" + err.Path
-		if err.Error == user.ErrWrongPassword || err.Error == data.ErrNotFound {
+		if err.Error == user.ErrWrongPassword || err.Error == data.ErrNotFound || err.Error == user.ErrWrongPhone {
 			response.Error(w, "Phone / password is wrong", http.StatusBadRequest, *err)
 		} else {
 			response.Error(w, "Internal Server Error", http.StatusInternalServerError, *err)

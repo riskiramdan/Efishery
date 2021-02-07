@@ -52,6 +52,7 @@ module.exports = class extends UserRepository {
 
   async getByToken(userToken) {
     const seqUser = await this.model.findOne({ where: { token: userToken } });
+    if (!seqUser) return false;
     return new User(seqUser.id, seqUser.roleId, seqUser.name, seqUser.phone, seqUser.password, seqUser.token, seqUser.tokenExpiredAt);
   }  
 

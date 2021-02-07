@@ -17,9 +17,8 @@ module.exports = {
     const { roleId, name, phone } = request.payload;
 
     // Treatment
-    const user = await CreateUser(roleId, name, phone, serviceLocator);
+    const user = await CreateUser(roleId, name, phone, serviceLocator);  
 
-    // Output
     return serviceLocator.userSerializer.serialize(user);
   },
 

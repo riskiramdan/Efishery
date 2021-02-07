@@ -4,6 +4,7 @@ import (
 	"net/http"
 	"time"
 
+	"github.com/go-redis/redis/v8"
 	"github.com/riskiramdan/efishery/golang/internal/concurrency"
 	"github.com/riskiramdan/efishery/golang/internal/data"
 	"github.com/riskiramdan/efishery/golang/internal/http/response"
@@ -21,6 +22,7 @@ type ConcurrencyList struct {
 type ConcurrencyController struct {
 	concurrencyService concurrency.ServiceInterface
 	utility            *u.Utility
+	redisManager       *redis.Client
 }
 
 const (
@@ -105,9 +107,11 @@ func (a *ConcurrencyController) GetAggregation(w http.ResponseWriter, r *http.Re
 func NewConcurrencyController(
 	concurrencyService concurrency.ServiceInterface,
 	utility *u.Utility,
+	redisManager *redis.Client,
 ) *ConcurrencyController {
 	return &ConcurrencyController{
 		concurrencyService: concurrencyService,
 		utility:            utility,
+		redisManager:       redisManager,
 	}
 }

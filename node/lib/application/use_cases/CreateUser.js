@@ -2,8 +2,7 @@
 
 const User = require('../../domain/User');
 
-module.exports = (roleId, name, phone, { userRepository }) => {
-
+module.exports = async (roleId, name, phone, { userRepository }) => {
   const user = new User(null, roleId, name, phone, makepwd(4));
   return userRepository.persist(user);
 };

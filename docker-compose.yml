@@ -10,7 +10,8 @@ services:
     environment: 
       POSTGRES_USERNAME : postgres
       POSTGRES_PASSWORD : qweasd123
-      POSTGRES_DATABASE : efisherydb
+      POSTGRES_DB : efisherydb
+
 
   redis:
     image: redis:latest

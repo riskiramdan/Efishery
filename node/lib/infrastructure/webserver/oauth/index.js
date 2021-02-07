@@ -26,6 +26,7 @@ module.exports = {
       path:'/oauth/verify',
       handler: AuthorizationController.extractAcccessToken,
       options: {
+        auth:'oauth-jwt',
         tags : ['api']
       },
     },
@@ -44,6 +45,14 @@ module.exports = {
       handler: ConcurrenctyController.getAggregatePrice,
       config: {
         auth:'oauth-jwt',
+        tags : ['api']
+      },
+    },
+    {
+      method:'POST',
+      path:'/verify',
+      handler: AuthorizationController.extractAcccessToken,
+      options: {
         tags : ['api']
       },
     }

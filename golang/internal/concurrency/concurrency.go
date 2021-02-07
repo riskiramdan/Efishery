@@ -3,12 +3,14 @@ package concurrency
 import (
 	"context"
 	"encoding/json"
+	"fmt"
 	"math"
 	"net/http"
 	"sort"
 	"strconv"
 	"time"
 
+	"github.com/go-redis/redis/v8"
 	"github.com/riskiramdan/efishery/golang/internal/data"
 	"github.com/riskiramdan/efishery/golang/internal/hosts"
 	"github.com/riskiramdan/efishery/golang/internal/types"
@@ -75,17 +77,27 @@ type ServiceInterface interface {
 
 // Service is the domain logic implementation of user Service interface
 type Service struct {
-	httpManager *hosts.HTTPManager
-	cache       *cache.Cache
+	httpManager  *hosts.HTTPManager
+	redisManager *redis.Client
 }
 
 // ListDataPrice ..
 func (s *Service) ListDataPrice(ctx context.Context, header *http.Header) ([]*ConResult, int, *types.Error) {
 	key := "CONVERTION"
-	cached, found := getCache(s.cache, key)
-	if found {
-		return cached.([]*ConResult), len(cached.([]*ConResult)), nil
+	res := []*ConResult{}
+	if getRedisCache(ctx, s.redisManager, key) != "" {
+		if err := json.Unmarshal([]byte(getRedisCache(ctx, s.redisManager, key)), &res); err != nil {
+			fmt.Println("get")
+			return nil, 0, &types.Error{
+				Path:    ".ConcurrencyService->ListDataPrice()",
+				Message: err.Error(),
+				Error:   err,
+				Type:    "validation-error",
+			}
+		}
+		return res, len(res), nil
 	}
+
 	result, err := getListData(s.httpManager, header)
 	if err != nil {
 		return nil, 0, &types.Error{
@@ -96,7 +108,7 @@ func (s *Service) ListDataPrice(ctx context.Context, header *http.Header) ([]*Co
 		}
 	}
 
-	conv, err := getUSD(s.cache, s.httpManager, header)
+	conv, err := getUSD(ctx, s.redisManager, s.httpManager, header)
 	if err != nil {
 		return nil, 0, &types.Error{
 			Path:    ".ConcurrencyService->ListDataPrice()",
@@ -105,7 +117,7 @@ func (s *Service) ListDataPrice(ctx context.Context, header *http.Header) ([]*Co
 			Type:    "validation-error",
 		}
 	}
-	res := []*ConResult{}
+
 	if len(result) > 0 {
 		for i := 0; i < len(result); i++ {
 			if result[i].UUID != "" {
@@ -124,7 +136,9 @@ func (s *Service) ListDataPrice(ctx context.Context, header *http.Header) ([]*Co
 			}
 		}
 	}
-	setCache(s.cache, key, res)
+
+	setRedisCache(ctx, s.redisManager, key, res)
+
 	return res, len(res), nil
 }
 
@@ -195,12 +209,15 @@ func getListData(hm *hosts.HTTPManager, header *http.Header) ([]*ConStorage, err
 	return result, nil
 }
 
-func getUSD(c *cache.Cache, hm *hosts.HTTPManager, header *http.Header) (*ConIDRUSD, error) {
+func getUSD(ctx context.Context, r *redis.Client, hm *hosts.HTTPManager, header *http.Header) (*ConIDRUSD, error) {
 	result := &ConIDRUSD{}
 	key := "USD_IDR"
-	cached, found := getCache(c, key)
-	if found {
-		return cached.(*ConIDRUSD), nil
+	if getRedisCache(ctx, r, key) != "" {
+		if err := json.Unmarshal([]byte(getRedisCache(ctx, r, key)), &result); err != nil {
+			return nil, err
+		}
+		fmt.Println("get from redis idr")
+		return result, nil
 	}
 	url := "https://free.currconv.com/api/v7/convert?q=USD_IDR&compact=ultra&apiKey=bbc99fbf718c1a23be93"
 	data, err := hm.HTTPGet(url, *header)
@@ -210,7 +227,8 @@ func getUSD(c *cache.Cache, hm *hosts.HTTPManager, header *http.Header) (*ConIDR
 	if err = json.Unmarshal(data, &result); err != nil {
 		return nil, err
 	}
-	setCache(c, key, result)
+	fmt.Println("get from hit api idr")
+	setRedisCache(ctx, r, key, result)
 	return result, err
 }
 
@@ -252,6 +270,21 @@ func getCache(c *cache.Cache, key string) (interface{}, bool) {
 	return result, found
 }
 
+func setRedisCache(ctx context.Context, r *redis.Client, key string, value interface{}) error {
+	result, err := json.Marshal(&value)
+	if err != nil {
+		return err
+	}
+	if err := r.Set(ctx, key, result, time.Hour*12).Err(); err != nil {
+		return err
+	}
+	return nil
+}
+
+func getRedisCache(ctx context.Context, r *redis.Client, key string) string {
+	return r.Get(ctx, key).Val()
+}
+
 func jsonString(data interface{}) (string, error) {
 	a, errType := json.Marshal(data)
 	if errType != nil {
@@ -282,10 +315,10 @@ func findMedian(data interface{}) float64 {
 // NewService creates a new concurrency AppService
 func NewService(
 	httpManager *hosts.HTTPManager,
-	cache *cache.Cache,
+	redisManager *redis.Client,
 ) *Service {
 	return &Service{
-		httpManager: httpManager,
-		cache:       cache,
+		httpManager:  httpManager,
+		redisManager: redisManager,
 	}
 }

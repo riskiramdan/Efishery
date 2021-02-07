@@ -8,6 +8,7 @@ import (
 	"os/signal"
 	"time"
 
+	"github.com/go-redis/redis/v8"
 	"github.com/riskiramdan/efishery/golang/config"
 	"github.com/riskiramdan/efishery/golang/internal/concurrency"
 	"github.com/riskiramdan/efishery/golang/internal/data"
@@ -30,6 +31,7 @@ type Server struct {
 	concurrencyService    concurrency.ServiceInterface
 	concurrencyController *controller.ConcurrencyController
 	httpManager           *hosts.HTTPManager
+	redisManager          *redis.Client
 }
 
 func (hs *Server) authMethod(r chi.Router, method string, path string, handler http.HandlerFunc) {
@@ -131,9 +133,10 @@ func NewServer(
 	config *config.Config,
 	utility *util.Utility,
 	httpManager *hosts.HTTPManager,
+	redisManager *redis.Client,
 ) *Server {
 	userController := controller.NewUserController(userService, dataManager, utility)
-	concurrencyController := controller.NewConcurrencyController(concurrencyService, utility)
+	concurrencyController := controller.NewConcurrencyController(concurrencyService, utility, redisManager)
 	return &Server{
 		dataManager:           dataManager,
 		userService:           userService,
@@ -142,5 +145,6 @@ func NewServer(
 		concurrencyService:    concurrencyService,
 		concurrencyController: concurrencyController,
 		httpManager:           httpManager,
+		redisManager:          redisManager,
 	}
 }
